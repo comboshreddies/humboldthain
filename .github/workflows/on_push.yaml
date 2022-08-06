@@ -1,0 +1,9 @@
+name: run-on-push
+on: [push]
+jobs:
+  run-on-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: make docker image
+        run: make docker-image
