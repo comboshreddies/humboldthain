@@ -12,4 +12,4 @@ jobs:
       - name: run pwd
         run: pwd ; ls
       - name: run docker test
-        run: ./docker_test.sh
+        run: ./docker-test.sh
