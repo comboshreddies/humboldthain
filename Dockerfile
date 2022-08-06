@@ -1,0 +1,22 @@
+FROM gcr.io/distroless/static-debian11
+
+ARG BIN=go03
+
+ARG GIN_MODE=default
+ENV GIN_MODE=${GIN_MODE}
+
+ARG GITHUB_HASH=unknown
+ENV GITHUB_HASH=${GITHUB_HASH}
+
+ARG PROJECT_NAME=unknown
+ENV PROJECT_NAME=${PROJECT_NAME}
+
+ARG VERSION=unknown
+ENV VERSION=${VERSION}
+
+WORKDIR /app
+COPY ${BIN} /app/server
+
+USER 1000
+ENTRYPOINT ["/app/server"]
+
