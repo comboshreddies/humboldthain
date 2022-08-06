@@ -8,10 +8,28 @@ DOCKER_TAG := ${PROJECT_NAME}-${GO_FILE}:${VERSION}
 GO_DIR := "go_pkg"
 
 .PHONY: build-local-bin cleani deps-clean mr-proper docker-image \
-	check-docker-image go-get-gin
+	check-docker-image go-get-gin project-name version github-hash \
+	go-file docker-tag
+
+default: build-local-bin
+
+project-name:
+	@echo ${PROJECT_NAME}
+
+version:
+	@echo ${VERSION}
+
+github-hash:
+	@echo ${GITHUB_HASH}
+
+go-file:
+	@echo ${GO_FILE}
+
+docker-tag:
+	@echo ${DOCKER_TAG}
 
 build-local-bin:
-	docker run --rm \
+	docker run -it --rm \
 	  -u $$(id -u):$$(id -g) \
 	  -e GOPATH="/src/${GO_DIR}" \
 	  -e GOCACHE="/src/${GO_DIR}/.cache" \
@@ -54,7 +72,7 @@ go-get-testify:
 	@( ${GO} list -m -u github.com/stretchr/testify || ${GO} get -u github.com/stretchr/testify )
 
 test:
-	docker run --rm \
+	docker run -it --rm \
 	  -u $$(id -u):$$(id -g) \
 	  -e GOPATH="/src/${GO_DIR}" \
 	  -e GOCACHE="/src/${GO_DIR}/.cache" \
@@ -82,16 +100,16 @@ local-run: ${GO_FILE}
 	./${GO_FILE}
 
 docker-run: check-docker-image
-	docker run -p 8080:8080 --rm ${DOCKER_TAG}
-
-docker-run-release: check-docker-image
-	docker run -d -p 8080:8080 --rm -e GIN_MODE=release --name ${PROJECT_NAME}-${GO_FILE} ${DOCKER_TAG}
-
-docker-stop-release:
-	docker stop ${PROJECT_NAME}-${GO_FILE}
+	docker run -it -p 8080:8080 --rm ${DOCKER_TAG}
 
 docker-test:
 	./docker-test.sh
+
+docker-tests:
+	timeout 60 make docker-test
+	export PORT=8082 ; timeout 60 make docker-test
+	export CLIPORT=8082 ; timeout 60 make docker-test
+	export CLIPORT=8082 ; export PORT=8081 ; timeout 60 make docker-test
 
 docker-clean: 
 	docker image rm -f ${DOCKER_TAG}
