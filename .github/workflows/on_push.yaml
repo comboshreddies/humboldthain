@@ -13,3 +13,8 @@ jobs:
         run: pwd ; ls
       - name: run docker test
         run: ./docker-test.sh
+      - name: login and push
+        env:
+          PASSWORD: ${{ secrets.GH_PAT }}
+        run: ./ghcr-push.sh
+
