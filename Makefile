@@ -11,7 +11,7 @@ GO_DIR := "go_pkg"
 	check-docker-image go-get-gin
 
 build-local-bin:
-	docker run -it --rm \
+	docker run --rm \
 	  -u $$(id -u):$$(id -g) \
 	  -e GOPATH="/src/${GO_DIR}" \
 	  -e GOCACHE="/src/${GO_DIR}/.cache" \
@@ -54,7 +54,7 @@ go-get-testify:
 	@( ${GO} list -m -u github.com/stretchr/testify || ${GO} get -u github.com/stretchr/testify )
 
 test:
-	docker run -it --rm \
+	docker run --rm \
 	  -u $$(id -u):$$(id -g) \
 	  -e GOPATH="/src/${GO_DIR}" \
 	  -e GOCACHE="/src/${GO_DIR}/.cache" \
@@ -82,7 +82,7 @@ local-run: ${GO_FILE}
 	./${GO_FILE}
 
 docker-run: check-docker-image
-	docker run -it -p 8080:8080 --rm ${DOCKER_TAG}
+	docker run -p 8080:8080 --rm ${DOCKER_TAG}
 
 docker-run-release: check-docker-image
 	docker run -d -p 8080:8080 --rm -e GIN_MODE=release --name ${PROJECT_NAME}-${GO_FILE} ${DOCKER_TAG}
