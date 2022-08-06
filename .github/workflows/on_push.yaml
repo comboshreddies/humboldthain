@@ -9,5 +9,7 @@ jobs:
         run: make docker-image
       - name: run unit test
         run: make test
+      - name: run pwd
+        run: pwd ; ls
       - name: run docker test
         run: ./docker_test.sh
