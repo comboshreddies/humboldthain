@@ -1,4 +1,5 @@
 #!/bin/bash
+source /root/.bashrc
 cd /root
 gpg -d  --batch --yes --passphrase "${GKE_TGZ_PASS}" gcp_cnf.tgz.gpg | tar xzvf -
 
