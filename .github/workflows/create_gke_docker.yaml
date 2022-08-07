@@ -1,0 +1,12 @@
+name: create-gke-docker
+on: [workflow_dispatch]
+jobs:
+  create-gke-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: create gke docker
+        env:
+          PASSWORD: ${{ secrets.GH_PAT }}
+        run: ./utils/create_gke_docker.sh
+

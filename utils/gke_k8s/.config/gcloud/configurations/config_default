@@ -1,0 +1,8 @@
+[core]
+account = combo.shreddies@gmail.com
+project = sonic-mile-358115
+
+[compute]
+zone = europe-west2
+region = europe-west2
+

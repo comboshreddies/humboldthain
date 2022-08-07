@@ -1,0 +1,12 @@
+name: delete-gke-k8s
+on: [workflow_dispatch]
+jobs:
+  delete-gke-k8s:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: delete gke k8
+        env:
+          PASSWORD: ${{ secrets.GH_PAT }}
+        run: ./gke_k8s.sh delete
+

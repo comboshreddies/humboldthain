@@ -1,0 +1,13 @@
+name: create-gke-k8s
+on: [workflow_dispatch]
+jobs:
+  create-gke-k8s:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: create gke k8s
+        env:
+          PASSWORD: ${{ secrets.GH_PAT }}
+          GKE_TGZ_PASS: ${{ secrets.GKE_TGZ_PASS }}
+        run: ./utils/gke_k8s.sh create
+

@@ -16,7 +16,7 @@ docker images
 docker login ghcr.io -u $USERNAME -p $GHCRPASS
 
 make docker-image
-docker tag ${DOCKER_TAG} ghcr.io/comboshreddies/${DOCKER_TAG}
+docker tag ${DOCKER_TAG} ghcr.io/${USERNAME}/${DOCKER_TAG}
 docker push ghcr.io/${USERNAME}/${DOCKER_TAG}
 
 
