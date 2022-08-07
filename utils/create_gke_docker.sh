@@ -11,5 +11,5 @@ docker login ghcr.io -u $USERNAME -p $GHCRPASS
 
 docker build . -t  ghcr.io/${USERNAME}/${DOCKER_TAG}
 docker push ghcr.io/${USERNAME}/${DOCKER_TAG}
-
+docker images | grep ${USERNAME}
 
