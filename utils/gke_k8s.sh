@@ -9,6 +9,8 @@ FULL_DOCKER="ghcr.io/${USERNAME}/${DOCKER_TAG}"
 
 docker login ghcr.io -u "$USERNAME" -p "$GHCRPASS"
 
+cd ../..
+
 echo "------------debug-----"
 echo ${PWD}
 ls
