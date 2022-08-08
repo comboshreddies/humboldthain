@@ -12,9 +12,6 @@ RUN apt update -y && \
 RUN /bin/bash -c " source /root/google-cloud-sdk/completion.bash.inc && source /root/google-cloud-sdk/path.bash.inc && gcloud components update && gcloud components install kubectl"
 
 COPY gcp_cnf.tgz.gpg .
-COPY create.sh .
-COPY delete.sh .
-COPY k8s.sh .
 COPY setup.sh .
 
 RUN curl https://apt.releases.hashicorp.com/gpg | gpg --dearmor > /usr/share/keyrings/hashicorp-archive-keyring.gpg && \

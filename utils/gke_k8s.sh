@@ -2,26 +2,18 @@
 USERNAME=comboshreddies
 GHCRPASS=$PASSWORD
 
-cd utils/gke_k8s
-VERSION=$(cat version)
+VERSION=$(cat utils/gke_k8s/version)
 DOCKER_TAG="gke_k8s:${VERSION}"
 FULL_DOCKER="ghcr.io/${USERNAME}/${DOCKER_TAG}"
 
 docker login ghcr.io -u "$USERNAME" -p "$GHCRPASS"
 
-cd ../..
-
-echo "------------debug-----"
-echo ${PWD}
-ls
-echo "--------------"
-
 if [ "$1" == "create" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /root/create.sh
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /manifests/scripts/create.sh
 fi
 
 if [ "$1" == "delete" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /root/delete.sh
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /manifests/scripts/delete.sh
 fi
 
 if [ "$1" == "k8s_deploy" ] ; then 
