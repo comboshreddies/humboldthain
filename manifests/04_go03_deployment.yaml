@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cs-go03
+  namespace: go03
   labels:
     app: go03
 spec:

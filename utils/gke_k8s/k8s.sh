@@ -10,16 +10,30 @@ kubectl get ns
 if [ "$1" == "deploy" ] ; then
 	cd /manifests
 	kubectl apply -f *.yaml
+	ls
+	LIST=$(ls *.yaml | sort -n)
+	for i in $LIST ; do
+	   echo apply $i
+	   kubectl apply -f $i
+	done
+
+        kubectl -n go03 get all
 fi
 
 if [ "$1" == "delete" ] ; then
 	cd /manifests
-	kubectl delete -f *.yaml
+	ls
+	LIST=$(ls *.yaml | sort -nr)
+	for i in $LIST ; do
+	   echo deleting $i
+	   kubectl delete -f $i
+	done
+
+        kubectl -n go03 get all
 fi
 
 if [ "$1" == "getAll" ] ; then
-	cd /manifests
-	kubectl -n go03 get all
+        kubectl -n go03 get all
 fi
 
 
