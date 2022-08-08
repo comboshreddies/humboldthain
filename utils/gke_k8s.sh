@@ -5,27 +5,33 @@ GHCRPASS=$PASSWORD
 cd utils/gke_k8s
 VERSION=$(cat version)
 DOCKER_TAG="gke_k8s:${VERSION}"
+FULL_DOCKER="ghcr.io/${USERNAME}/${DOCKER_TAG}
 
-docker login ghcr.io -u $USERNAME -p $GHCRPASS
+docker login ghcr.io -u "$USERNAME" -p "$GHCRPASS"
+
+echo ------------debug-----
+echo ${PWD}
+ls
+echo --------------
 
 if [ "$1" == "create" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ghcr.io/${USERNAME}/${DOCKER_TAG} /root/create.sh
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /root/create.sh
 fi
 
 if [ "$1" == "delete" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ghcr.io/${USERNAME}/${DOCKER_TAG} /root/delete.sh
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /root/delete.sh
 fi
 
 if [ "$1" == "k8s_deploy" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" -v ${PWD}/manifests:manifests ghcr.io/${USERNAME}/${DOCKER_TAG} /root/k8s.sh deploy
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" -v ${PWD}/manifests:manifests ${FULL_DOCKER} /root/k8s.sh deploy
 fi
 
 if [ "$1" == "k8s_delete" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" -v ${PWD}/manifests:/manifests ghcr.io/${USERNAME}/${DOCKER_TAG} /root/k8s.sh delete
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" -v ${PWD}/manifests:/manifests ${FULL_DOCKER} /root/k8s.sh delete
 fi
 
 if [ "$1" == "k8s_getAll" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" -v ${PWD}/manifests:/manifests ghcr.io/${USERNAME}/${DOCKER_TAG} /root/k8s.sh getAll
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" -v ${PWD}/manifests:/manifests ${FULL_DOCKER} /root/k8s.sh getAll
 fi
 
 
