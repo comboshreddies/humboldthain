@@ -9,11 +9,15 @@ FULL_DOCKER="ghcr.io/${USERNAME}/${DOCKER_TAG}"
 docker login ghcr.io -u "$USERNAME" -p "$GHCRPASS"
 
 if [ "$1" == "create" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /manifests/scripts/create.sh
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" \
+	   -v ${PWD}/manifests:/manifests ${FULL_DOCKER} \
+	   /manifests/scripts/create.sh
 fi
 
 if [ "$1" == "delete" ] ; then 
-   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}"  ${FULL_DOCKER} /manifests/scripts/delete.sh
+   docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" \
+           -v ${PWD}/manifests:/manifests ${FULL_DOCKER} \
+	   /manifests/scripts/delete.sh
 fi
 
 if [ "$1" == "k8s_deploy" ] ; then 
