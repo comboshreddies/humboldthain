@@ -96,5 +96,3 @@ func TestShutdownStatusOfRouteParams(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, "", w.Body.String())
 }
-
-
