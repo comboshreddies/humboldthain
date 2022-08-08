@@ -105,12 +105,6 @@ docker-run: check-docker-image
 docker-test:
 	./docker-test.sh
 
-docker-tests:
-	timeout 60 make docker-test
-	export PORT=8082 ; timeout 60 make docker-test
-	export CLIPORT=8082 ; timeout 60 make docker-test
-	export CLIPORT=8082 ; export PORT=8081 ; timeout 60 make docker-test
-
 docker-clean: 
 	docker image rm -f ${DOCKER_TAG}
 

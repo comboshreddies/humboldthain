@@ -45,6 +45,8 @@ func customLogger(param gin.LogFormatterParams) string {
 
 
 func setRoutes() *gin.Engine {
+
+  readyStatus = http.StatusOK
   gin.DisableConsoleColor()
   r := gin.New()
   r.Use(gin.LoggerWithFormatter(customLogger))
@@ -80,8 +82,14 @@ func setRoutes() *gin.Engine {
   })
 
   r.GET("/internal/shutdown", func(c *gin.Context) {
-    readyStatus = http.StatusServiceUnavailable
-    c.String(readyStatus,"")
+    state := c.DefaultQuery("state", "")
+    if state == "off" {
+      readyStatus = http.StatusServiceUnavailable
+    }
+    if state == "on" {
+      readyStatus = http.StatusOK
+    }
+    c.String(http.StatusOK,"")
   })
 
   return r
@@ -97,7 +105,6 @@ func main() {
      fmt.Println("invalid command line flag port value, or no flag port specified, fallback to default port")
   }
 
-  readyStatus = http.StatusOK
 
   r := setRoutes()
   if port != -1 {
