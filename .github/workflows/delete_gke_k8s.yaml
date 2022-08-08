@@ -8,5 +8,5 @@ jobs:
       - name: delete gke k8
         env:
           PASSWORD: ${{ secrets.GH_PAT }}
-        run: ./gke_k8s.sh delete
+        run: ./utils/gke_k8s.sh delete
 
