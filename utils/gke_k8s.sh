@@ -26,7 +26,7 @@ fi
 
 if [ "$1" == "k8s_deploy" ] ; then 
    docker run --rm -e GKE_TGZ_PASS="${GKE_TGZ_PASS}" \
-	   -v ${PWD}/manifests:manifests ${FULL_DOCKER} \
+	   -v ${PWD}/manifests:/manifests ${FULL_DOCKER} \
 	   /manifests/scripts/k8s.sh deploy
 fi
 
