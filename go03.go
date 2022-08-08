@@ -11,6 +11,8 @@ import (
   "os"
 )
 
+var readyStatus int
+
 func cutCamelWithSpaces(s string) string {
     var result string
     runes := []rune(s)
@@ -49,23 +51,38 @@ func setRoutes() *gin.Engine {
   r.Use(gin.Recovery())
 
   r.GET("/helloworld", func(c *gin.Context) {
-    name := c.DefaultQuery("name", "Stranger")
-    new_name := cutCamelWithSpaces(name)
-    c.String(http.StatusOK, "Hello %s", new_name)
+    if readyStatus == http.StatusOK  {
+        name := c.DefaultQuery("name", "Stranger")
+        new_name := cutCamelWithSpaces(name)
+        c.String(http.StatusOK, "Hello %s", new_name)
+      } else {
+	 c.String(readyStatus,"")
+      }
   })
 
   r.GET("/versionz", func(c *gin.Context) {
-      c.JSON(http.StatusOK, gin.H{
-      "github_hash" : getEnv("GITHUB_HASH"),
-      "project_name" : getEnv("PROJECT_NAME"),
-    })
+      if readyStatus == http.StatusOK  {
+         c.JSON(http.StatusOK, gin.H{
+           "github_hash" : getEnv("GITHUB_HASH"),
+           "project_name" : getEnv("PROJECT_NAME"),
+         })
+      } else {
+	 c.String(readyStatus,"")
+      }
   })
 
-  // TODO append /probe/live /probe/ready route for healthcheck
+  r.GET("/internal/live", func(c *gin.Context) {
+    c.String(http.StatusOK,"")
+  })
 
-  //  gin.DebugPrintRouteFunc = func(httpMethod, absolutePath, handlerName string, nuHandlers int) {
-  //   log.Printf("endpoint %v %v %v %v\n", httpMethod, absolutePath, handlerName, nuHandlers)
-  //   }
+  r.GET("/internal/ready", func(c *gin.Context) {
+    c.String(readyStatus,"")
+  })
+
+  r.GET("/internal/shutdown", func(c *gin.Context) {
+    readyStatus = http.StatusServiceUnavailable
+    c.String(readyStatus,"")
+  })
 
   return r
 }
@@ -79,6 +96,8 @@ func main() {
   if port < 0  || port > 65535 {
      fmt.Println("invalid command line flag port value, or no flag port specified, fallback to default port")
   }
+
+  readyStatus = http.StatusOK
 
   r := setRoutes()
   if port != -1 {
